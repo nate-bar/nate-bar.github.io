@@ -115,6 +115,7 @@ h1 { font-size: 1.3rem; margin: 0; }
   border-radius: 8px;
   resize: none;
   caret-color: #33ff33;
+  text-transform: uppercase;
 }
 
 .terminal-box:focus {
