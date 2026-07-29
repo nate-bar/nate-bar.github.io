@@ -2,11 +2,13 @@
 
 Random clearance prompt, graded readback, custom keyboard remapping — no
 backend, no build step. Plain static site: `index.html`, `style.css`,
-`script.js`. Reference data (callsigns/locations/aircraft) and the
-keyboard mapping are both plain constants at the top of `script.js` — not
-editable from the UI, not stored anywhere. The only thing that persists
-between visits is which runway config (28/10) was last active, via
-`localStorage`. No attempt history or scoring is recorded anywhere.
+`script.js`. Reference data (callsigns/locations/aircraft) is a plain
+constant at the top of `script.js` — not editable from the UI. The
+keyboard mapping ships with a default layout (also in `script.js`) but
+**is** editable from an in-app panel, and your edits persist via
+`localStorage`. The only other thing that persists between visits is
+which runway config (28/10) was last active. No attempt history or
+scoring is recorded anywhere.
 
 ## Deploy to GitHub Pages
 
@@ -31,20 +33,36 @@ between visits is which runway config (28/10) was last active, via
 Every future change is: edit a file, `git commit`, `git push`. GitHub
 rebuilds automatically.
 
-## Changing reference data or the keyboard mapping
+## Changing reference data
 
-Both live as plain arrays/objects at the top of `script.js`:
+`DEFAULT_LOCATIONS`, `DEFAULT_AIRCRAFT`, `DEFAULT_CALLSIGNS` — the lookup
+tables the prompt generator draws from — live as plain arrays at the top
+of `script.js`. Edit directly, `git commit`, `git push`. There's no
+in-app editor for these; they're meant to be "set once" and rarely
+touched.
 
-- `DEFAULT_LOCATIONS`, `DEFAULT_AIRCRAFT`, `DEFAULT_CALLSIGNS` — the
-  lookup tables the prompt generator draws from.
-- `DEFAULT_KEYMAP` — physical key (`KeyboardEvent.code`) → the character
-  that key should type. Not the printed letter on a standard keycap — the
-  physical position, which is what matters once you've moved stickers
-  around.
+## Keyboard mapping
 
-Edit these directly, `git commit`, `git push`. There's no in-app editor
-for either — that's intentional, since both are "set once" configuration
-rather than something you'd change session to session.
+`DEFAULT_KEYMAP` at the top of `script.js` is the shipped starting point:
+physical key (`KeyboardEvent.code`) → the character that key should type.
+Not the printed letter on a standard keycap — the physical position,
+which is what matters once you've moved stickers around.
+
+Unlike reference data, this **is** editable in the app itself: expand
+**Keyboard mapping** to see a grid shaped like a physical keyboard (plus
+a numpad section). Each box is one physical key, labeled with its
+standard identity below it (e.g. the box under "R" controls what the
+physical R key produces). Changes save automatically to `localStorage`
+and take effect immediately — no page reload needed. **Reset to shipped
+default** restores `DEFAULT_KEYMAP` exactly as it's defined in code.
+
+Space and Enter aren't in the grid — they're reserved for moving to the
+next line and submitting, and pressing them always does that regardless
+of what's mapped to their physical keys.
+
+If you edit `DEFAULT_KEYMAP` in code later (say, to change the shipped
+starting point), anyone with existing customizations in `localStorage`
+keeps them — only keys they haven't touched pick up the new default.
 
 ## The answer box
 
@@ -62,9 +80,9 @@ place of 4 separate fields. Type all 4 values into it in order:
 behave normally, including merging back across a line break, since it's a
 real textarea under the hood.
 
-Every other character key goes through `DEFAULT_KEYMAP` first — so
-whatever's remapped to a given physical key is what lands in the box,
-regardless of what's printed on the keycap.
+Every other character key goes through the active keyboard mapping first
+— so whatever's remapped to a given physical key is what lands in the
+box, regardless of what's printed on the keycap.
 
 ## Callsign grading: the "N" is optional
 
@@ -83,8 +101,8 @@ browser:
 node test_logic.js
 ```
 
-Re-run this after editing `gradeAttempt`, `buildPrompt`, or `normCallsign`
-at the top of `script.js`.
+Re-run this after editing `gradeAttempt`, `buildPrompt`, `normCallsign`,
+or `mergeKeymapDefaults` at the top of `script.js`.
 
 ## Local testing before you push
 

@@ -127,6 +127,7 @@ const DEFAULT_KEYMAP = {
 };
 
 const CONFIG_STORAGE_KEY = "atc_trainer_active_config";
+const KEYMAP_STORAGE_KEY = "atc_trainer_keymap";
 
 // ============================================================
 // Core game logic — pure functions, no DOM access, so these can
@@ -170,12 +171,19 @@ function gradeAttempt(callsign, location, aircraft, config, lines) {
   return { results, all_pass };
 }
 
+// Backfills any DEFAULT_KEYMAP entries missing from a saved keymap (e.g.
+// after DEFAULT_KEYMAP gains a new key) without touching the user's
+// existing customizations. Returns a new object; does not mutate saved.
+function mergeKeymapDefaults(saved) {
+  return Object.assign({}, DEFAULT_KEYMAP, saved || {});
+}
+
 // ============================================================
 // Export for Node-based testing (harmless in the browser — module is undefined there)
 // ============================================================
 if (typeof module !== "undefined") {
   module.exports = {
-    gradeAttempt, buildPrompt, norm, normCallsign,
+    gradeAttempt, buildPrompt, norm, normCallsign, mergeKeymapDefaults,
     DEFAULT_KEYMAP, DEFAULT_LOCATIONS, DEFAULT_AIRCRAFT, DEFAULT_CALLSIGNS,
   };
 }
@@ -191,6 +199,31 @@ const MAX_LINES = 4;
 
 let activeConfig = localStorage.getItem(CONFIG_STORAGE_KEY) || "28";
 let currentPrompt = null; // { prompt_text, callsign, location, aircraft }
+
+function loadKeymap() {
+  let raw;
+  try {
+    raw = localStorage.getItem(KEYMAP_STORAGE_KEY);
+  } catch (e) {
+    raw = null;
+  }
+  if (!raw) return Object.assign({}, DEFAULT_KEYMAP);
+  try {
+    return mergeKeymapDefaults(JSON.parse(raw));
+  } catch (e) {
+    return Object.assign({}, DEFAULT_KEYMAP);
+  }
+}
+
+function saveKeymap(km) {
+  try {
+    localStorage.setItem(KEYMAP_STORAGE_KEY, JSON.stringify(km));
+  } catch (e) {
+    console.error("Could not save keymap:", e);
+  }
+}
+
+let keymap = loadKeymap();
 
 const answerBox = document.getElementById("answerBox");
 const promptTextEl = document.getElementById("promptText");
@@ -320,9 +353,85 @@ answerBox.addEventListener("keydown", (e) => {
   }
 
   e.preventDefault();
-  const mapped = DEFAULT_KEYMAP[e.code];
+  const mapped = keymap[e.code];
   if (mapped === undefined || mapped === "") return;
   insertAtCursor(answerBox, mapped.toUpperCase());
+});
+
+// ---------- Keyboard mapping panel ----------
+
+// Layout data purely for display labels in the grid — shows which
+// physical key each box corresponds to. Decoupled from DEFAULT_KEYMAP's
+// (already-remapped) output values.
+const PHYSICAL_KEY_ROWS = [
+  [["Digit1","1"],["Digit2","2"],["Digit3","3"],["Digit4","4"],["Digit5","5"],
+   ["Digit6","6"],["Digit7","7"],["Digit8","8"],["Digit9","9"],["Digit0","0"],
+   ["Minus","-"],["Equal","="]],
+  [["KeyQ","Q"],["KeyW","W"],["KeyE","E"],["KeyR","R"],["KeyT","T"],
+   ["KeyY","Y"],["KeyU","U"],["KeyI","I"],["KeyO","O"],["KeyP","P"],
+   ["BracketLeft","["],["BracketRight","]"]],
+  [["KeyA","A"],["KeyS","S"],["KeyD","D"],["KeyF","F"],["KeyG","G"],
+   ["KeyH","H"],["KeyJ","J"],["KeyK","K"],["KeyL","L"],
+   ["Semicolon",";"],["Quote","'"]],
+  [["KeyZ","Z"],["KeyX","X"],["KeyC","C"],["KeyV","V"],["KeyB","B"],
+   ["KeyN","N"],["KeyM","M"],["Comma",","],["Period","."],["Slash","/"]],
+];
+
+const PHYSICAL_NUMPAD_ROWS = [
+  [["Numpad7","7"],["Numpad8","8"],["Numpad9","9"]],
+  [["Numpad4","4"],["Numpad5","5"],["Numpad6","6"]],
+  [["Numpad1","1"],["Numpad2","2"],["Numpad3","3"]],
+  [["Numpad0","0"]],
+];
+
+const toggleKeymapBtn = document.getElementById("toggleKeymap");
+const keymapBody = document.getElementById("keymapBody");
+const keymapGrid = document.getElementById("keymapGrid");
+const numpadGrid = document.getElementById("numpadGrid");
+
+toggleKeymapBtn.addEventListener("click", () => {
+  const showing = keymapBody.style.display !== "none";
+  keymapBody.style.display = showing ? "none" : "block";
+  toggleKeymapBtn.textContent = showing ? "Show" : "Hide";
+  if (!showing) {
+    renderKeyGrid(PHYSICAL_KEY_ROWS, keymapGrid);
+    renderKeyGrid(PHYSICAL_NUMPAD_ROWS, numpadGrid);
+  }
+});
+
+function makeKeyBox(code, label) {
+  const keyEl = document.createElement("div");
+  keyEl.className = "kb-key";
+  const labelEl = document.createElement("div");
+  labelEl.className = "kb-label";
+  labelEl.textContent = label;
+  const input = document.createElement("input");
+  input.maxLength = 1;
+  input.value = keymap[code] ?? "";
+  input.addEventListener("change", (e) => {
+    keymap[code] = e.target.value;
+    saveKeymap(keymap);
+  });
+  keyEl.appendChild(labelEl);
+  keyEl.appendChild(input);
+  return keyEl;
+}
+
+function renderKeyGrid(rows, container) {
+  container.innerHTML = "";
+  rows.forEach((row) => {
+    const rowEl = document.createElement("div");
+    rowEl.className = "kb-row";
+    row.forEach(([code, label]) => rowEl.appendChild(makeKeyBox(code, label)));
+    container.appendChild(rowEl);
+  });
+}
+
+document.getElementById("resetKeymap").addEventListener("click", () => {
+  keymap = Object.assign({}, DEFAULT_KEYMAP);
+  saveKeymap(keymap);
+  renderKeyGrid(PHYSICAL_KEY_ROWS, keymapGrid);
+  renderKeyGrid(PHYSICAL_NUMPAD_ROWS, numpadGrid);
 });
 
 // ---------- Init ----------
