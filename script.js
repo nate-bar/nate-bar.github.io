@@ -114,7 +114,7 @@ const DEFAULT_KEYMAP = {
   Numpad6: "6", Numpad7: "1", Numpad8: "2", Numpad9: "3", Numpad0: "0",
   Minus: "g", Equal: "=",
   KeyQ: "q", KeyW: "w", KeyE: "e", KeyR: "h", KeyT: "i",
-  KeyY: "j", KeyU: "k", KeyI: "l", KeyO: "m", KeyP: "n",
+  KeyY: "j", KeyU: "k", KeyI: "1", KeyO: "2", KeyP: "3",
   BracketLeft: "[", BracketRight: "]",
   KeyA: "a", KeyS: "s", KeyD: "d", KeyF: "o", KeyG: "p",
   KeyH: "q", KeyJ: "r", KeyK: "s", KeyL: "t",
