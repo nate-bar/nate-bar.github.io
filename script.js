@@ -110,8 +110,8 @@ const DEFAULT_CALLSIGNS = [
 // Keyed by KeyboardEvent.code (physical key position), not by the
 // character normally printed on that key.
 const DEFAULT_KEYMAP = {
-  Numpad1: "7", Numpad2: "8", Numpad3: "9", Numpad4: "4", Numpad5: "5",
-  Numpad6: "6", Numpad7: "1", Numpad8: "2", Numpad9: "3", Numpad0: "0",
+  Numpad1: "1", Numpad2: "2", Numpad3: "3", Numpad4: "4", Numpad5: "5",
+  Numpad6: "6", Numpad7: "7", Numpad8: "8", Numpad9: "9", Numpad0: "0",
   Minus: "g", Equal: "=",
   KeyQ: "q", KeyW: "w", KeyE: "e", KeyR: "r", KeyT: "t",
   KeyY: "y", KeyU: "u", KeyI: "i", KeyO: "o", KeyP: "p",
