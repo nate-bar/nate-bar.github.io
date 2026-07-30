@@ -171,7 +171,20 @@ const DEFAULT_CALLSIGNS = [
   { callsign: "DRAGN18" },
   { callsign: "N62PZ" },
   { callsign: "FENIX45" },
-  { callsign: "" },
+  { callsign: "N831MT" },
+  { callsign: "N9912Q" },
+  { callsign: "ROGUE1" },
+  { callsign: "N292JS" },
+  { callsign: "N247JP" },
+  { callsign: "N62PZ" },
+  { callsign: "MOBIL81" },
+  { callsign: "N4427R" },
+  { callsign: "LN890WA" },
+  { callsign: "TALON71" },
+  { callsign: "N122KA" },
+  { callsign: "N662LF" },
+  { callsign: "N1850M" },
+  { callsign: "N56CD" },
 ];
 
 // Keyboard mapping — also static, also not editable from the UI.
