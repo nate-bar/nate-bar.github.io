@@ -113,20 +113,20 @@ const DEFAULT_CALLSIGNS = [
 // starting point; the practice page's in-app editor can override
 // individual keys, persisted to localStorage under KEYMAP_STORAGE_KEY.
 const DEFAULT_KEYMAP = {
-  Numpad1: "7", Numpad2: "8", Numpad3: "9", Numpad4: "4", Numpad5: "5",
-  Numpad6: "6", Numpad7: "1", Numpad8: "2", Numpad9: "3", Numpad0: "0",
+  Numpad1: "1", Numpad2: "2", Numpad3: "3", Numpad4: "4", Numpad5: "5",
+  Numpad6: "6", Numpad7: "7", Numpad8: "8", Numpad9: "9", Numpad0: "0",
   Minus: "g", Equal: "=",
-  KeyQ: "q", KeyW: "w", KeyE: "e", KeyR: "h", KeyT: "i",
-  KeyY: "j", KeyU: "k", KeyI: "l", KeyO: "m", KeyP: "n",
+  KeyQ: "q", KeyW: "w", KeyE: "e", KeyR: "r", KeyT: "t",
+  KeyY: "y", KeyU: "u", KeyI: "i", KeyO: "o", KeyP: "p",
   BracketLeft: "[", BracketRight: "]",
-  KeyA: "a", KeyS: "s", KeyD: "d", KeyF: "o", KeyG: "p",
-  KeyH: "q", KeyJ: "r", KeyK: "s", KeyL: "t",
+  KeyA: "a", KeyS: "s", KeyD: "d", KeyF: "f", KeyG: "g",
+  KeyH: "h", KeyJ: "j", KeyK: "k", KeyL: "l",
   Semicolon: "u", Quote: "'",
-  KeyZ: "z", KeyX: "x", KeyC: "v", KeyV: "w", KeyB: "x",
-  KeyN: "y", KeyM: "z", Comma: ",", Period: ".", Slash: "/",
+  KeyZ: "z", KeyX: "x", KeyC: "c", KeyV: "v", KeyB: "b",
+  KeyN: "n", KeyM: "m", Comma: ",", Period: ".", Slash: "/",
   Space: " ",
-  Digit1: "1", Digit2: "2", Digit3: "3", Digit4: "4", Digit5: "a",
-  Digit6: "b", Digit7: "c", Digit8: "d", Digit9: "e", Digit0: "f",
+  Digit1: "1", Digit2: "2", Digit3: "3", Digit4: "4", Digit5: "5",
+  Digit6: "6", Digit7: "7", Digit8: "8", Digit9: "9", Digit0: "0",
 };
 
 const KEYMAP_STORAGE_KEY = "atc_trainer_keymap";
