@@ -33,7 +33,6 @@ const DEFAULT_LOCATIONS = [
   { display_name: "Jerome", code: "SE4", letter_rwy28: "G", letter_rwy10: "G" },
   { display_name: "Parma", code: "WW4", letter_rwy28: "G", letter_rwy10: "G" },
   { display_name: "Arco", code: "NE4", letter_rwy28: "A", letter_rwy10: "G" },
-  { display_name: "Smiley Creek", code: "NE4", letter_rwy28: "A", letter_rwy10: "G" },
   { display_name: "Murphy", code: "4MU", letter_rwy28: "G", letter_rwy10: "G" },
   { display_name: "Mountain Home", code: "4MH", letter_rwy28: "G", letter_rwy10: "G" },
   { display_name: "Idaho City", code: "4IC", letter_rwy28: "A", letter_rwy10: "G" },
