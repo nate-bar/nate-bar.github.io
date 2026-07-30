@@ -33,19 +33,7 @@ const DEFAULT_LOCATIONS = [
   { display_name: "Jerome", code: "SE4", letter_rwy28: "G", letter_rwy10: "G" },
   { display_name: "Parma", code: "WW4", letter_rwy28: "G", letter_rwy10: "G" },
   { display_name: "Arco", code: "NE4", letter_rwy28: "A", letter_rwy10: "G" },
-  { display_name: "Murphy", code: "4MU", letter_rwy28: "G", letter_rwy10: "G" },
-  { display_name: "Mountain Home", code: "4MH", letter_rwy28: "G", letter_rwy10: "G" },
-  { display_name: "Idaho City", code: "4IC", letter_rwy28: "A", letter_rwy10: "G" },
   { display_name: "Smiley Creek", code: "NE4", letter_rwy28: "A", letter_rwy10: "G" },
-  { display_name: "South Practice Area", code: "4SP", letter_rwy28: "G", letter_rwy10: "G" },
-  { display_name: "Emmett", code: "4EM", letter_rwy28: "G", letter_rwy10: "A" },
-  { display_name: "Sun Valley (Neg. flight following)", code: "4SV", letter_rwy28: "A", letter_rwy10: "G" },
-  { display_name: "Sun Valley (W/ flight following"), code: "SUN", letter_rwy28: "A", letter_rwy10: "G" },
-  { display_name: "Sun Valley (Neg. flight following, valley route)", code: "4SV", letter_rwy28: "G", letter_rwy10: "G" },
-  { display_name: "City Tour", code: "4CT", letter_rwy28: "T", letter_rwy10: "T" },
-  { display_name: "Nampa", code: "MAN", letter_rwy28: "G", letter_rwy10: "G" },
-  { display_name: "Caldwell", code: "EUL", letter_rwy28: "G", letter_rwy10: "G" },
-  { display_name: "Sunriver", code: "S21", letter_rwy28: "G", letter_rwy10: "G" },
 ];
 
 const DEFAULT_AIRCRAFT = [
@@ -234,7 +222,7 @@ function buildPrompt(locations, aircraft, callsigns) {
   const callsign = pickRandom(callsigns);
   const location = pickRandom(locations);
   const plane = pickRandom(aircraft);
-  const prompt_text = `${callsign.callsign} we are a ${plane.display_name} requesting clearance to ${location.display_name}`;
+  const prompt_text = `${callsign.callsign} we are a ${plane.display_name} VFR to ${location.display_name}`;
   return { prompt_text, callsign, location, aircraft: plane };
 }
 
