@@ -102,6 +102,12 @@ input.addEventListener("keydown", (e) => {
     return;
   }
 
+  if (e.code === "Delete") {
+    e.preventDefault();
+    input.value = "";
+    return;
+  }
+
   if (e.code === "Space") {
     e.preventDefault(); // designators don't contain spaces — ignore
     return;
