@@ -94,17 +94,16 @@ function submitAnswer() {
 
 input.addEventListener("keydown", (e) => {
   if (e.ctrlKey || e.metaKey || e.altKey) return; // allow shortcuts through
+  if (e.code === "Delete") {
+    e.preventDefault();
+    input.value = "";
+    return;
+  }
   if (PASSTHROUGH_CODES.has(e.code)) return; // navigation/editing keys untouched
 
   if (e.code === "Enter" || e.code === "NumpadEnter") {
     e.preventDefault();
     submitAnswer();
-    return;
-  }
-
-  if (e.code === "Delete") {
-    e.preventDefault();
-    input.value = "";
     return;
   }
 
