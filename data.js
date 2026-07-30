@@ -134,7 +134,7 @@ const KEYMAP_STORAGE_KEY = "atc_trainer_keymap";
 // Keys that should always behave normally (navigation/editing), never
 // remapped. Shared by every page that intercepts keydown for remapping.
 const PASSTHROUGH_CODES = new Set([
-  "Backspace", "Delete", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown",
+  "Backspace", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown",
   "Home", "End", "Tab",
   "ShiftLeft", "ShiftRight", "ControlLeft", "ControlRight",
   "AltLeft", "AltRight", "MetaLeft", "MetaRight", "CapsLock", "Escape", "NumLock",
