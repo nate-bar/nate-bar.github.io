@@ -1,16 +1,16 @@
 // Run with: node test_logic.js
-// Exercises the pure logic in script.js (grading, prompt building, the
+// Exercises the pure logic in data.js (grading, prompt building, the
 // N-optional callsign rule, keymap merge) without needing a browser.
-// Re-run after any edits to the logic functions at the top of script.js
-// OR after editing DEFAULT_LOCATIONS/DEFAULT_AIRCRAFT/DEFAULT_CALLSIGNS —
-// this file deliberately does NOT hardcode specific codes/designators, so
-// it stays correct even as the reference lists change.
+// Re-run after any edits to the logic functions in data.js OR after
+// editing DEFAULT_LOCATIONS/DEFAULT_AIRCRAFT/DEFAULT_CALLSIGNS — this
+// file deliberately does NOT hardcode specific codes/designators, so it
+// stays correct even as the reference lists change.
 
 const assert = require("assert");
 const {
   gradeAttempt, buildPrompt, norm, normCallsign, mergeKeymapDefaults,
   DEFAULT_KEYMAP, DEFAULT_LOCATIONS, DEFAULT_AIRCRAFT, DEFAULT_CALLSIGNS,
-} = require("./script.js");
+} = require("./data.js");
 
 // --- prompt building ---
 const prompt = buildPrompt(DEFAULT_LOCATIONS, DEFAULT_AIRCRAFT, DEFAULT_CALLSIGNS);
