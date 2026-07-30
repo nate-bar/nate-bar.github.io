@@ -178,6 +178,8 @@ const DEFAULT_CALLSIGNS = [
   { callsign: "N56CD" },
   { callsign: "N5107F" },
   { callsign: "N418DM" },
+  { callsign: "N4830K" },
+  { callsign: "N2863E" },
 ];
 
 // Keyboard mapping — also static, also not editable from the UI.
