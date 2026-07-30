@@ -1,0 +1,12 @@
+{
+  "name": "atc-trainer-static",
+  "private": true,
+  "description": "Dev-only dependencies for simulate_pages.js. Not needed to run or deploy the site itself.",
+  "scripts": {
+    "test": "node test_logic.js",
+    "test:pages": "node simulate_pages.js"
+  },
+  "devDependencies": {
+    "jsdom": "^24.0.0"
+  }
+}

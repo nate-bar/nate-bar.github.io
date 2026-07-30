@@ -1,25 +1,44 @@
-# Clearance Readback Trainer (static / GitHub Pages version)
+# Clearance Readback Trainer + Speed Test (static / GitHub Pages)
 
-Random clearance prompt, graded readback, custom keyboard remapping — no
-backend, no build step. Plain static site: `index.html`, `style.css`,
-`script.js`. Reference data (callsigns/locations/aircraft) is a plain
-constant at the top of `script.js` — not editable from the UI. The
-keyboard mapping ships with a default layout (also in `script.js`) but
-**is** editable from an in-app panel, and your edits persist via
-`localStorage`. The only other thing that persists between visits is
-which runway config (28/10) was last active. No attempt history or
-scoring is recorded anywhere.
+Two pages, sharing one set of reference data and one keyboard mapping:
+
+- **`index.html`** — the readback trainer. Random clearance prompt, graded
+  4-line readback in a black/green terminal box.
+- **`speedtest.html`** — a 60-second typing speed test: an aircraft name
+  flashes, you type its designator and press Enter, next one appears.
+  Score is aircraft-per-minute (since the round is fixed at 60s, the
+  correct-answer count *is* the per-minute rate).
+
+No backend, no build step. A small nav bar at the top of each page links
+to the other, so it behaves like two tabs of one app.
+
+## Files
+
+- `data.js` — **shared** reference data (`DEFAULT_LOCATIONS`,
+  `DEFAULT_AIRCRAFT`, `DEFAULT_CALLSIGNS`), the keyboard mapping default
+  and its `localStorage` persistence, and the pure grading/prompt logic.
+  Loaded by both pages before their own script — this is the one place
+  aircraft/location/callsign data lives, so the two games can never drift
+  out of sync.
+- `script.js` — readback trainer page logic only (assumes `data.js` is
+  already loaded).
+- `speedtest.js` — speed test page logic only (also assumes `data.js`).
+- `style.css` — shared styling for both pages.
+- `test_logic.js` — Node-runnable tests for the pure logic in `data.js`.
+- `simulate_pages.js` — optional: loads both HTML pages in a real DOM
+  (via `jsdom`) and clicks through the key flows, to catch runtime errors
+  before you ship. Requires `npm install` first (see below).
 
 ## Deploy to GitHub Pages
 
-1. Create a new repo on GitHub (public or private both work for Pages on a
-   personal account).
+1. Create a new repo on GitHub (public or private both work for Pages on
+   a personal account).
 2. Push these files to the root of the repo (`main` branch):
    ```bash
    cd atc-trainer-static
    git init
-   git add index.html style.css script.js test_logic.js README.md
-   git commit -m "Clearance readback trainer"
+   git add index.html speedtest.html style.css data.js script.js speedtest.js test_logic.js simulate_pages.js package.json README.md
+   git commit -m "Clearance readback trainer + speed test"
    git branch -M main
    git remote add origin https://github.com/<you>/<repo-name>.git
    git push -u origin main
@@ -30,85 +49,83 @@ scoring is recorded anywhere.
 4. GitHub gives you a URL like `https://<you>.github.io/<repo-name>/`
    within a minute or two.
 
-Every future change is: edit a file, `git commit`, `git push`. GitHub
-rebuilds automatically.
+Every future change is: edit a file, `git commit`, `git push`.
 
 ## Changing reference data
 
-`DEFAULT_LOCATIONS`, `DEFAULT_AIRCRAFT`, `DEFAULT_CALLSIGNS` — the lookup
-tables the prompt generator draws from — live as plain arrays at the top
-of `script.js`. Edit directly, `git commit`, `git push`. There's no
-in-app editor for these; they're meant to be "set once" and rarely
-touched.
+`DEFAULT_LOCATIONS`, `DEFAULT_AIRCRAFT`, `DEFAULT_CALLSIGNS` live as plain
+arrays at the top of `data.js` — edit directly, `git commit`, `git push`.
+No in-app editor for these; both pages pick up whatever's there. The
+speed test only uses `DEFAULT_AIRCRAFT`.
 
 ## Keyboard mapping
 
-`DEFAULT_KEYMAP` at the top of `script.js` is the shipped starting point:
-physical key (`KeyboardEvent.code`) → the character that key should type.
-Not the printed letter on a standard keycap — the physical position,
-which is what matters once you've moved stickers around.
+`DEFAULT_KEYMAP` in `data.js` is the shipped starting point: physical key
+(`KeyboardEvent.code`) → the character that key should type — the
+physical position, not the printed letter, since that's what matters once
+you've moved stickers around.
 
-Unlike reference data, this **is** editable in the app itself: expand
-**Keyboard mapping** to see a grid shaped like a physical keyboard (plus
-a numpad section). Each box is one physical key, labeled with its
-standard identity below it (e.g. the box under "R" controls what the
-physical R key produces). Changes save automatically to `localStorage`
-and take effect immediately — no page reload needed. **Reset to shipped
-default** restores `DEFAULT_KEYMAP` exactly as it's defined in code.
+Editable from the readback trainer page: expand **Keyboard mapping** to
+see a grid shaped like a physical keyboard (plus a numpad section). Each
+box is one physical key; changes save automatically to `localStorage` and
+take effect immediately. **Reset to shipped default** restores
+`DEFAULT_KEYMAP` exactly as defined in code.
 
-Space and Enter aren't in the grid — they're reserved for moving to the
-next line and submitting, and pressing them always does that regardless
-of what's mapped to their physical keys.
+**The speed test uses the same saved mapping** — it's the same physical
+keyboard, so there's one shared mapping rather than a separate one per
+page. There's no keymap editor on the speed test page itself; edit it
+from the trainer page and it applies everywhere.
 
-If you edit `DEFAULT_KEYMAP` in code later (say, to change the shipped
-starting point), anyone with existing customizations in `localStorage`
-keeps them — only keys they haven't touched pick up the new default.
+Space and Enter aren't remappable on either page — they're reserved for
+line-advance/submit (trainer) or just ignored/submit (speed test).
 
-## The answer box
-
-One `<textarea>` styled as a black-background, green-text terminal, in
-place of 4 separate fields. Type all 4 values into it in order:
-
-1. Callsign
-2. Location code
-3. Aircraft designator
-4. Runway letter
-
-**Space bar moves to the next line** instead of typing a space character
-— so pressing it after the callsign drops you onto line 2, and so on.
-**Enter submits** the whole thing for grading. Backspace/Delete/arrows all
-behave normally, including merging back across a line break, since it's a
-real textarea under the hood.
-
-Every other character key goes through the active keyboard mapping first
-— so whatever's remapped to a given physical key is what lands in the
-box, regardless of what's printed on the keycap.
+If `DEFAULT_KEYMAP` gains new keys later, anyone with existing
+customizations in `localStorage` keeps them — only untouched keys pick up
+the new default.
 
 ## Callsign grading: the "N" is optional
 
-For the callsign line specifically, a leading `N` is stripped from both
-your input and the correct answer before comparing — so typing `874GV`
-passes just as well as typing `N874GV`. This only applies to line 1; the
-other three fields still need an exact (case-insensitive) match.
+On the trainer's callsign line specifically, a leading `N` is stripped
+from both your input and the correct answer before comparing — `874GV`
+passes just as well as `N874GV`. Only applies to that one field.
+
+## Speed test details
+
+- Round is a fixed 60 seconds; hit **Start** to begin.
+- Designator matching is an exact, case-insensitive match — no
+  leniency (unlike the trainer's callsign field).
+- The same aircraft never appears twice in a row.
+- Score shown at the end: correct count (= aircraft/min), total
+  attempted, and accuracy %. Nothing is saved anywhere — refresh and it's
+  gone, by design.
+- If you'd rather it *not* advance to the next aircraft on a wrong
+  answer (forcing you to correct it before moving on), that's a
+  reasonable alternative design — just ask and I can change it.
 
 ## Running tests
-
-`test_logic.js` exercises grading (including the N-optional rule and the
-config-dependent runway letter) and prompt-building without needing a
-browser:
 
 ```bash
 node test_logic.js
 ```
+Exercises grading, prompt-building, and the keymap merge logic — no
+dependencies needed. Re-run after editing any pure function in `data.js`.
 
-Re-run this after editing `gradeAttempt`, `buildPrompt`, `normCallsign`,
-or `mergeKeymapDefaults` at the top of `script.js`.
+Optional, more thorough check — actually loads both HTML pages in a real
+DOM and clicks through Start/Show/typing flows:
+```bash
+npm install
+npm run test:pages
+```
 
 ## Local testing before you push
 
-Just open `index.html` directly in a browser — no server needed, since
-there's no backend to talk to. If you'd rather serve it over `http://`:
-
+Just open `index.html` or `speedtest.html` directly in a browser — no
+server needed. One caveat: Firefox restricts `localStorage` on pages
+opened directly as a local file (`file://...`), so keymap edits and the
+RWY28/10 choice won't persist there specifically (everything still
+*works*, it just won't remember your choices between visits). This
+doesn't affect GitHub Pages or Chromium browsers. If you want full
+persistence while testing locally in Firefox, serve it instead:
 ```bash
 python3 -m http.server 8000
 ```

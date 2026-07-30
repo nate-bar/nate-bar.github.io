@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aircraft Designator Speed Test</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Aircraft Designator Speed Test</h1>
+      <div class="timer-display" id="timerDisplay">60</div>
+    </header>
+
+    <nav class="tab-nav">
+      <a href="index.html" class="tab-link">Readback Trainer</a>
+      <a href="speedtest.html" class="tab-link active">Speed Test</a>
+    </nav>
+
+    <section class="card">
+      <div id="startScreen">
+        <p class="speedtest-hint">
+          An aircraft name will appear — type its designator and press
+          Enter. As many as you can in 60 seconds. Uses your keyboard
+          mapping from the Readback Trainer tab, if you've set one up.
+        </p>
+        <button id="startBtn" type="button" class="btn-primary">Start</button>
+      </div>
+
+      <div id="playScreen" style="display:none;">
+        <div class="prompt-label">Aircraft</div>
+        <div id="aircraftName" class="prompt-text">—</div>
+        <input id="designatorInput" class="terminal-box speed-input"
+          autocomplete="off" autocapitalize="off" spellcheck="false">
+      </div>
+
+      <div id="resultsScreen" style="display:none;">
+        <div class="results-score" id="scoreDisplay"></div>
+        <div class="results-detail" id="resultsDetail"></div>
+        <button id="restartBtn" type="button" class="btn-primary">Try again</button>
+      </div>
+    </section>
+  </div>
+<script src="data.js"></script>
+<script src="speedtest.js"></script>
+</body>
+</html>
