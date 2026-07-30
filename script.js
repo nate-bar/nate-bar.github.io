@@ -115,6 +115,12 @@ answerBox.addEventListener("keydown", (e) => {
   if (e.ctrlKey || e.metaKey || e.altKey) return; // allow shortcuts through
   if (PASSTHROUGH_CODES.has(e.code)) return; // navigation/editing keys untouched
 
+  if (e.code === "Delete") {
+    e.preventDefault();
+    answerBox.value = "";
+    return;
+  }
+
   // Enter submits (a plain textarea would otherwise just insert a newline)
   if (e.code === "Enter" || e.code === "NumpadEnter") {
     e.preventDefault();
