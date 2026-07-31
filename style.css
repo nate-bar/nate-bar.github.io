@@ -324,3 +324,29 @@ button[type="submit"], #nextBtn {
   display: block;
   margin: 0 auto;
 }
+
+.wrong-list-title {
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 8px;
+  text-align: center;
+}
+
+.wrong-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 6px
+  margin-bottom: 6px;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  background: rgba(248, 81, 73, 0.12);
+  border: 1px solid rgba(248, 81, 73, 0.4);
+}
+
+.wrong-answer {
+  color: var(--fail);
+}
+
