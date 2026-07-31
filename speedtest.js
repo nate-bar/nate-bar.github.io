@@ -33,7 +33,7 @@ let seenDesignators = new Set();
 // Avoid showing the same aircraft twice in a row (only matters if the
 // list has more than one entry).
 function pickNextAircraft() {
-  let unseen = DEFAULT_AIRCRAFT.filter((a) +> !seenDesignators.has(a.designator));
+  let unseen = DEFAULT_AIRCRAFT.filter((a) => !seenDesignators.has(a.designator));
   if (unseen.length === 0 ) {
     // exhausted the whole list, start over
     seenDesignators = new Set();
