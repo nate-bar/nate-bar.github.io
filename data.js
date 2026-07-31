@@ -165,7 +165,7 @@ function buildPrompt(locations, aircraft, callsigns) {
   const callsign = pickRandom(callsigns);
   const location = pickRandom(locations);
   const plane = pickRandom(aircraft);
-  const prompt_text = `${callsign.callsign} we are a ${plane.display_name} requesting clearance to ${location.display_name}`;
+  const prompt_text = `${callsign.callsign} we are a ${plane.display_name} VFR to ${location.display_name}`;
   return { prompt_text, callsign, location, aircraft: plane };
 }
 
