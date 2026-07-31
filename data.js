@@ -55,7 +55,7 @@ const DEFAULT_AIRCRAFT = [
   { display_name: "Champ/Citabria", designator: "CH7A" },
   { display_name: "Skyhawk", designator: "C172" },
   { display_name: "Cardinal", designator: "C177" },
-  { display_name: "Skywagon", designator: "C180" },
+  { display_name: "180 Skywagon", designator: "C180" },
   { display_name: "Skylane", designator: "C182" },
   { display_name: "Skywagon", designator: "C185" },
   { display_name: "Stationair", designator: "C206" },
