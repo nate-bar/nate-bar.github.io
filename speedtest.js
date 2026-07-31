@@ -45,6 +45,8 @@ function pickNextAircraft() {
 function showNextAircraft() {
   previousAircraft = currentAircraft;
   currentAircraft = pickNextAircraft();
+
+  seenDesignators.add(currentAircraft.designator);
   aircraftNameEl.textContent = currentAircraft.display_name;
   input.value = "";
 }
