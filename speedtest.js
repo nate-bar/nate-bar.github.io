@@ -27,6 +27,8 @@ let secondsLeft = ROUND_SECONDS;
 let timerId = null;
 let running = false;
 
+let wrongAttempts = [];
+
 // Avoid showing the same aircraft twice in a row (only matters if the
 // list has more than one entry).
 function pickNextAircraft() {
@@ -45,9 +47,20 @@ function showNextAircraft() {
   input.value = "";
 }
 
+
+function renderWrongList() {
+  const wrongListEl = document.getElementById("wrongList");
+  if (!wrongAttempts.length) {
+    wrongListEl.innerHTML = "";
+    return;
+  }
+  wrongListEl.innerHTML = "<h3 class='wrong-list-title'>Missed</h3>" + wrongAttempts.map((w) => `<div class="wrong-row"><span>${w.name}</span><span class ="wrong-answer">typed "${w.typed || "(blank)"}" - correct: ${w.correct}</span></div>`).join("");
+}
+
 function startRound() {
   correctCount = 0;
   totalCount = 0;
+  wrongAttempts = [];
   secondsLeft = ROUND_SECONDS;
   running = true;
 
@@ -81,6 +94,7 @@ function endRound() {
   resultsDetail.textContent = totalCount
     ? `${correctCount} correct out of ${totalCount} attempted (${accuracy}% accuracy)`
     : "No attempts submitted — try pressing Enter after typing a designator.";
+  renderWrongList()
 }
 
 function submitAnswer() {
@@ -88,6 +102,9 @@ function submitAnswer() {
   totalCount += 1;
   if (norm(input.value) === norm(currentAircraft.designator)) {
     correctCount += 1;
+  }
+  else {
+    wrongAttempts.push({name: currentAircraft.display_name, typed: input.value, correct: currentAircraft.designator, });
   }
   showNextAircraft();
 }
