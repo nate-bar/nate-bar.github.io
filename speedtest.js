@@ -28,16 +28,18 @@ let timerId = null;
 let running = false;
 
 let wrongAttempts = [];
+let seenDesignators = new Set();
 
 // Avoid showing the same aircraft twice in a row (only matters if the
 // list has more than one entry).
 function pickNextAircraft() {
-  if (DEFAULT_AIRCRAFT.length <= 1) return DEFAULT_AIRCRAFT[0];
-  let next;
-  do {
-    next = pickRandom(DEFAULT_AIRCRAFT);
-  } while (previousAircraft && next.designator === previousAircraft.designator);
-  return next;
+  let unseen = DEFAULT_AIRCRAFT.filter((a) +> !seenDesignators.has(a.designator));
+  if (unseen.length === 0 ) {
+    // exhausted the whole list, start over
+    seenDesignators = new Set();
+    unseen = DEFAULT_AIRCRAFT;
+  }
+  return pickRandom(unseen);
 }
 
 function showNextAircraft() {
@@ -61,6 +63,7 @@ function startRound() {
   correctCount = 0;
   totalCount = 0;
   wrongAttempts = [];
+  seenDesignators = new Set();
   secondsLeft = ROUND_SECONDS;
   running = true;
 
