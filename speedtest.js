@@ -54,7 +54,7 @@ function renderWrongList() {
     wrongListEl.innerHTML = "";
     return;
   }
-  wrongListEl.innerHTML = "<h3 class='wrong-list-title'>Missed</h3>" + wrongAttempts.map((w) => `<div class="wrong-row"><span>${w.name}</span><span class ="wrong-answer"> typed "${w.typed || "(blank)"}" - correct: ${w.correct}</span></div>`).join("");
+  wrongListEl.innerHTML = "<h3 class='wrong-list-title'>Missed</h3>" + wrongAttempts.map((w) => `<div class="wrong-row"><span>${w.name}</span><span class ="wrong-answer"> typed " ${w.typed || "(blank)"}" - correct: ${w.correct}</span></div>`).join("");
 }
 
 function startRound() {
